@@ -1,18 +1,16 @@
 groups:
-- name: example
-  rules:
-
-  # Alert for any instance that is unreachable for >2 minutes.
-  - alert: service_down
-    expr: up == 0
-    for: 2m
+- name: docker-alert
+  rules:  
+  - alert: ContainerKilled
+    expr: time() - container_last_seen > 60
+    for: 0m
     labels:
-      severity: page
+      severity: warning
     annotations:
-      summary: "Instance {{ $labels.instance }} down"
-      description: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 2 minutes."
+      summary: Container killed (instance {{ $labels.instance }})
+      description: "A container has disappeared\n  VALUE = {{ $value }}\n  LABELS = {{ $labels }}"
 
-  - alert: high_load
+  - alert: NodeHighLoad
     expr: node_load1 > 0.5
     for: 2m
     labels:
