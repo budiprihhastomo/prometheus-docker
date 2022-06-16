@@ -1,0 +1,86 @@
+version: "3.9"
+
+volumes:
+  prometheus-data:
+    external: true
+  grafana-data:
+    external: true
+
+networks:
+  ldinet:
+    external: true
+
+services:
+  prometheus:
+    image: prom/prometheus:v2.36.1
+    volumes:
+      - prometheus-data:/prometheus
+      - ./prometheus:/etc/prometheus
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/usr/share/prometheus/console_libraries"
+      - "--web.console.templates=/usr/share/prometheus/consoles"
+      - "--web.enable-lifecycle"
+      - "--web.enable-admin-api"
+    networks:
+      - ldinet
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+  node_exporter:
+    image: prom/node-exporter:v1.3.1
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - "--path.procfs=/host/proc"
+      - "--path.sysfs=/host/sys"
+      - --collector.filesystem.ignored-mount-points
+      - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"
+    networks:
+      - ldinet
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+  alert_manager:
+    image: prom/alertmanager:v0.24.0
+    volumes:
+      - "./alertmanager/:/etc/alertmanager/"
+    command:
+      - "--config.file=/etc/alertmanager/config.yml"
+      - "--storage.path=/alertmanager"
+    networks:
+      - ldinet
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor
+    volumes:
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
+    networks:
+      - ldinet
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+  grafana:
+    image: grafana/grafana:8.5.6
+    volumes:
+      - grafana-data:/var/lib/grafana
+    networks:
+      - ldinet
+    env_file:
+      - ./grafana/config.monitoring
+    deploy:
+      mode: global
+      restart_policy:
+        condition: on-failure
