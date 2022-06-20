@@ -8,6 +8,6 @@ receivers:
         bot_token: "5589634199:AAFXf-DYP1bp1fJb9ReIsZB_knV2bdyuke4"
         chat_id: -672184511
         http_config:
-        follow_redirects: true
+          follow_redirects: true
         send_resolved: true
         parse_mode: ""
