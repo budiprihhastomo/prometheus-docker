@@ -2,8 +2,8 @@ groups:
 - name: docker-alert
   rules:  
   - alert: ContainerKilled
-    expr: time() - container_last_seen > 60
-    for: 0m
+    expr: count by (instance, container_label_com_docker_swarm_service_name) (count_over_time(container_last_seen{container_label_com_docker_swarm_service_name!=""}[5m])) - 1 >= 5
+    for: 2m
     labels:
       severity: warning
     annotations:
