@@ -2,7 +2,7 @@ route:
   receiver: "kumda-telegram"
 
 receivers:
-  - name: "kumda-telegram"
-  - telegram_configs:
-      - bot_token: "5589634199:AAFXf-DYP1bp1fJb9ReIsZB_knV2bdyuke4"
-      - chat_id: "-672184511"
+  name: "kumda-telegram"
+  telegram_configs:
+    bot_token: "5589634199:AAFXf-DYP1bp1fJb9ReIsZB_knV2bdyuke4"
+    chat_id: "-672184511"
