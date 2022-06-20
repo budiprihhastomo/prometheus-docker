@@ -1,5 +1,5 @@
 route:
-  receiver: "slack"
+  receiver: "telegram"
 
 receivers:
-  - name: "slack"
+  - name: "telegram"
