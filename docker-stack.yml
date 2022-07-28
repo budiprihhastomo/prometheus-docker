@@ -46,18 +46,18 @@ services:
       restart_policy:
         condition: on-failure
 
-  alert_manager:
-    image: prom/alertmanager:v0.24.0
-    volumes:
-      - "./alertmanager/:/etc/alertmanager/"
-    command:
-      - "--config.file=/etc/alertmanager/config.yml"
-      - "--storage.path=/alertmanager"
-    networks:
-      - ldinet
-    deploy:
-      restart_policy:
-        condition: on-failure
+  # alert_manager:
+  #   image: prom/alertmanager:v0.24.0
+  #   volumes:
+  #     - "./alertmanager/:/etc/alertmanager/"
+  #   command:
+  #     - "--config.file=/etc/alertmanager/config.yml"
+  #     - "--storage.path=/alertmanager"
+  #   networks:
+  #     - ldinet
+  #   deploy:
+  #     restart_policy:
+  #       condition: on-failure
 
   cadvisor:
     image: gcr.io/cadvisor/cadvisor

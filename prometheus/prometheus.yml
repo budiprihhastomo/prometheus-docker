@@ -2,15 +2,15 @@ global:
   scrape_interval: 15s
   evaluation_interval: 15s
 
-alerting:
-  alertmanagers:
-    - scheme: http
-    - static_configs:
-        - targets:
-            - alert_manager:9093
+# alerting:
+#   alertmanagers:
+#     - scheme: http
+#     - static_configs:
+#         - targets:
+#             - alert_manager:9093
 
-rule_files:
-  - "alert.rules"
+# rule_files:
+#   - "alert.rules"
 
 scrape_configs:
   - job_name: prometheus
@@ -39,5 +39,5 @@ scrape_configs:
     scrape_timeout: 2s
     honor_labels: true
     static_configs:
-      - targets: ["ldi-gateway-dev_kong:8001"]
+      - targets: ["ldi-gateway-prod_kong:8001"]
     metrics_path: /metrics
